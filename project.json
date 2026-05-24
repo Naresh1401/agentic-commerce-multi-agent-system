@@ -1,0 +1,16 @@
+{
+  "id": "06",
+  "repo": "agentic-commerce-multi-agent-system",
+  "title": "Multi-Agent Commerce System",
+  "summary": "Supervisor-routed multi-agent workflow for meal planning, product discovery, pricing, inventory, cart, coupon, and checkout.",
+  "copy": [
+    "agents",
+    "backend/app/seed/sample_data.json"
+  ],
+  "extra_tests": {
+    "pytest.ini": "\n                [pytest]\n                pythonpath = agents .\n                addopts = -q\n            ",
+    "tests/test_graph.py": "\n                from graph import run_graph\n\n                def test_graph_pasta_dinner_requires_confirmation():\n                    state = run_graph()\n                    assert state['intent'] == 'meal_planning_cart_checkout'\n                    assert state['requires_confirmation'] is True\n                    assert any(item.get('agent') == 'checkout' for item in state['tool_results'])\n            "
+  },
+  "verify": "python3.11 -m pytest",
+  "run": "cd agents && python3.11 graph.py"
+}
